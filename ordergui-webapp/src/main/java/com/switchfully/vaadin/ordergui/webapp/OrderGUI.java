@@ -44,7 +44,7 @@ public class OrderGUI extends UI {
                 .forEach(item ->
                         mainLayout.addComponent(
                                 new HorizontalLayout(
-                                        new Label("--> " + item.name + " €" + item.price))));
+                                        new Label("--> " + item.getName() + " €" + item.getPrice()))));
     }
 
     private void addTitleLabel(VerticalLayout mainLayout) {

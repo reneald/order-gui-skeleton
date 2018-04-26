@@ -81,9 +81,9 @@ public class ItemCreationView extends CustomComponent implements View {
 
     private TextField createAmountOfStockField() {
         TextField amountOfStock = new TextField("Amount of Stock");
-        this.amountOfStock.setNullRepresentation("");
-        this.amountOfStock.setRequired(true);
-        this.amountOfStock.setRequiredError("Please provide an amount of stock.");
+        amountOfStock.setNullRepresentation("");
+        amountOfStock.setRequired(true);
+        amountOfStock.setRequiredError("Please provide an amount of stock.");
         return amountOfStock;
     }
 
