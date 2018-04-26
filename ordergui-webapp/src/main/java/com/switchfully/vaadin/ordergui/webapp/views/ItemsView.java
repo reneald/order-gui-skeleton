@@ -5,13 +5,14 @@ import com.switchfully.vaadin.ordergui.interfaces.items.ItemResource;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ItemsView extends VerticalLayout implements View {
+public class ItemsView extends CustomComponent implements View {
 
     private ItemResource itemResource;
+    private VerticalLayout mainLayout = new VerticalLayout();
 
     @Autowired
     public ItemsView(ItemResource itemResource) {
@@ -20,9 +21,28 @@ public class ItemsView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        setWidth("100%");
+        TopMenu topMenu = new TopMenu();
         BeanItemContainer<Item> itemContainer = new BeanItemContainer<>(Item.class, itemResource.getItems());
+        Label title = new Label("Items");
+        title.setStyleName(ValoTheme.LABEL_H1);
+        title.setWidth("50%");
+
+        TextField filterField = new TextField();
+        filterField.setInputPrompt("Filter");
+        Button filterButton = new Button("Filter");
+        filterButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        Button newItemButton = new Button("New Item");
+        newItemButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton, newItemButton);
+        filterLayout.setWidth("50%");
+
+        HorizontalLayout header = new HorizontalLayout(title, filterLayout);
+        header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
+        header.setComponentAlignment(filterLayout, Alignment.MIDDLE_RIGHT);
         Grid itemGrid = new Grid("Items", itemContainer);
-        itemGrid.setColumns("name","description");
-        addComponent(itemGrid);
+        itemGrid.setColumns("name","description", "price", "amountOfStock");
+        mainLayout.addComponents(topMenu, header, itemGrid);
+        setCompositionRoot(mainLayout);
     }
 }

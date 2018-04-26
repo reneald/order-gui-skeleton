@@ -27,6 +27,7 @@ public class OrderGUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+        setWidth("100%");
         navigator = new Navigator(this, this);
         navigator.addView("", new MainView());
         navigator.addView("items", new ItemsView(itemResource));
