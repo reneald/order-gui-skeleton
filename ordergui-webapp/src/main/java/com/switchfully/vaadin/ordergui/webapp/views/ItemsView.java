@@ -3,6 +3,8 @@ package com.switchfully.vaadin.ordergui.webapp.views;
 import com.switchfully.vaadin.ordergui.interfaces.items.Item;
 import com.switchfully.vaadin.ordergui.interfaces.items.ItemResource;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -33,7 +35,9 @@ public class ItemsView extends CustomComponent implements View {
         filterField.setInputPrompt("Filter");
         Button filterButton = new Button("Filter");
         filterButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        filterButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         Button newItemButton = new Button("New Item");
+        newItemButton.addClickListener(event1 -> getUI().getNavigator().navigateTo("items/new"));
         newItemButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton, newItemButton);
 
@@ -41,11 +45,27 @@ public class ItemsView extends CustomComponent implements View {
         header.setWidth("100%");
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
         header.setComponentAlignment(filterLayout, Alignment.MIDDLE_RIGHT);
-        Grid itemGrid = new Grid(itemContainer);
+
+        Grid itemGrid = new Grid();
+        setGridData(itemContainer, itemGrid);
+
+        filterButton.addClickListener(event1 -> {
+            itemContainer.removeAllContainerFilters();
+            if (!filterField.getValue().isEmpty()) {
+                itemContainer.addContainerFilter(
+                        new SimpleStringFilter("name", filterField.getValue(), true, false)
+                );
+            }
+        });
+
         itemGrid.setWidth("100%");
         itemGrid.setColumns("name","description", "price", "amountOfStock");
         mainLayout.setMargin(true);
         mainLayout.addComponents(topMenu, header, itemGrid);
         setCompositionRoot(mainLayout);
+    }
+
+    private void setGridData(BeanItemContainer<Item> itemContainer, Grid itemGrid) {
+        itemGrid.setContainerDataSource(itemContainer);
     }
 }

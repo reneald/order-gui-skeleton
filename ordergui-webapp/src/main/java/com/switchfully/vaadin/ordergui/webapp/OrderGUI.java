@@ -1,6 +1,7 @@
 package com.switchfully.vaadin.ordergui.webapp;
 
 import com.switchfully.vaadin.ordergui.interfaces.items.ItemResource;
+import com.switchfully.vaadin.ordergui.webapp.views.ItemCreationView;
 import com.switchfully.vaadin.ordergui.webapp.views.ItemsView;
 import com.switchfully.vaadin.ordergui.webapp.views.MainView;
 import com.vaadin.annotations.Theme;
@@ -31,6 +32,7 @@ public class OrderGUI extends UI {
         navigator = new Navigator(this, this);
         navigator.addView("", new MainView());
         navigator.addView("items", new ItemsView(itemResource));
+        navigator.addView("items/new", new ItemCreationView(itemResource));
 //        VerticalLayout mainLayout = new VerticalLayout();
 //        addTitleLabel(mainLayout);
 //        renderItems(mainLayout);
