@@ -1,6 +1,6 @@
 package com.switchfully.vaadin.ordergui.webapp;
 
-import com.switchfully.vaadin.ordergui.interfaces.customers.ItemResource;
+import com.switchfully.vaadin.ordergui.interfaces.items.ItemResource;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
