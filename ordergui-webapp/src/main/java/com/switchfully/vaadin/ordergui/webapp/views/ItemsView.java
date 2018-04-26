@@ -22,11 +22,12 @@ public class ItemsView extends CustomComponent implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         setWidth("100%");
+
         TopMenu topMenu = new TopMenu();
         BeanItemContainer<Item> itemContainer = new BeanItemContainer<>(Item.class, itemResource.getItems());
         Label title = new Label("Items");
         title.setStyleName(ValoTheme.LABEL_H1);
-        title.setWidth("50%");
+//        title.setWidth("200");
 
         TextField filterField = new TextField();
         filterField.setInputPrompt("Filter");
@@ -35,13 +36,15 @@ public class ItemsView extends CustomComponent implements View {
         Button newItemButton = new Button("New Item");
         newItemButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton, newItemButton);
-        filterLayout.setWidth("50%");
 
         HorizontalLayout header = new HorizontalLayout(title, filterLayout);
+        header.setWidth("100%");
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
         header.setComponentAlignment(filterLayout, Alignment.MIDDLE_RIGHT);
-        Grid itemGrid = new Grid("Items", itemContainer);
+        Grid itemGrid = new Grid(itemContainer);
+        itemGrid.setWidth("100%");
         itemGrid.setColumns("name","description", "price", "amountOfStock");
+        mainLayout.setMargin(true);
         mainLayout.addComponents(topMenu, header, itemGrid);
         setCompositionRoot(mainLayout);
     }
