@@ -20,10 +20,9 @@ public class ItemsView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Grid itemGrid = new Grid();
         BeanItemContainer<Item> itemContainer = new BeanItemContainer<>(Item.class, itemResource.getItems());
-        itemGrid.setContainerDataSource(itemContainer);
-//        itemGrid.setColumns("name","description");
+        Grid itemGrid = new Grid("Items", itemContainer);
+        itemGrid.setColumns("name","description");
         addComponent(itemGrid);
     }
 }
