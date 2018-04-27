@@ -3,11 +3,14 @@ package com.switchfully.vaadin.ordergui.webapp.views;
 import com.switchfully.vaadin.ordergui.interfaces.items.Item;
 import com.switchfully.vaadin.ordergui.interfaces.items.ItemResource;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
+import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,18 +18,16 @@ public class ItemsView extends CustomComponent implements View {
 
     private ItemResource itemResource;
     private VerticalLayout mainLayout = new VerticalLayout();
+    private Grid itemGrid;
+    private BeanItemContainer<Item> itemContainer;
 
     @Autowired
     public ItemsView(ItemResource itemResource) {
         this.itemResource = itemResource;
-    }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
         setWidth("100%");
-
         TopMenu topMenu = new TopMenu();
-        BeanItemContainer<Item> itemContainer = new BeanItemContainer<>(Item.class, itemResource.getItems());
+
         Label title = new Label("Items");
         title.setStyleName(ValoTheme.LABEL_H1);
 //        title.setWidth("200");
@@ -46,8 +47,9 @@ public class ItemsView extends CustomComponent implements View {
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
         header.setComponentAlignment(filterLayout, Alignment.MIDDLE_RIGHT);
 
-        Grid itemGrid = new Grid();
-        setGridData(itemContainer, itemGrid);
+        itemGrid = new Grid();
+        setGridData();
+
 
         filterButton.addClickListener(event1 -> {
             itemContainer.removeAllContainerFilters();
@@ -59,13 +61,37 @@ public class ItemsView extends CustomComponent implements View {
         });
 
         itemGrid.setWidth("100%");
-        itemGrid.setColumns("name","description", "price", "amountOfStock");
+        itemGrid.getColumn("edit").setRenderer(new ButtonRenderer(event ->
+            getUI().getNavigator().navigateTo("item/edit" + event.getItemId())));
+        itemGrid.setColumns("name","description","price","amountOfStock", "edit");
+        itemGrid.getColumn("edit").setMaximumWidth(95);
         mainLayout.setMargin(true);
         mainLayout.addComponents(topMenu, header, itemGrid);
         setCompositionRoot(mainLayout);
+
     }
 
-    private void setGridData(BeanItemContainer<Item> itemContainer, Grid itemGrid) {
-        itemGrid.setContainerDataSource(itemContainer);
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        this.setGridData();
+    }
+
+    private void setGridData() {
+        itemContainer = new BeanItemContainer<>(Item.class, itemResource.getItems());
+        GeneratedPropertyContainer generatedPropertyContainer = new GeneratedPropertyContainer(itemContainer);
+        generatedPropertyContainer.addGeneratedProperty("edit", new PropertyValueGenerator<String>() {
+
+
+            @Override
+            public String getValue(com.vaadin.data.Item item, Object itemId, Object propertyId) {
+                return "Edit";
+            }
+
+            @Override
+            public Class<String> getType() {
+                return String.class;
+            }
+        });
+        itemGrid.setContainerDataSource(generatedPropertyContainer);
     }
 }

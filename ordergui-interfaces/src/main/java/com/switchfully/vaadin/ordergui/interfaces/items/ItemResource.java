@@ -26,4 +26,8 @@ public class ItemResource {
     public void save(Item item) {
         restTemplate.postForObject("http://localhost:9000/items", item, Item.class);
     }
+
+    public Item getItemById(String id) {
+        return null;
+    }
 }

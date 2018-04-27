@@ -33,6 +33,7 @@ public class OrderGUI extends UI {
         navigator.addView("", new MainView());
         navigator.addView("items", new ItemsView(itemResource));
         navigator.addView("items/new", new ItemCreationView(itemResource));
+        navigator.addView("items/edit", new ItemCreationView(itemResource));
 //        VerticalLayout mainLayout = new VerticalLayout();
 //        addTitleLabel(mainLayout);
 //        renderItems(mainLayout);

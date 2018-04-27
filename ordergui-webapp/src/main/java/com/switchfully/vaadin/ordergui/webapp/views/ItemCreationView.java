@@ -19,24 +19,21 @@ public class ItemCreationView extends CustomComponent implements View {
     private TextField amountOfStock;
     private BeanFieldGroup<Item> fieldGroup;
     private Item item;
-
-    public ItemCreationView(ItemResource resource) {
-        this.resource = resource;
-    }
-
+    private TopMenu topMenu = new TopMenu();
     private ItemResource resource;
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
+    public ItemCreationView(ItemResource resource, Item item) {
+        this.item = item;
+        this.resource = resource;
         name = createNameField();
         description = createDescriptionField();
         price = createPriceField();
         amountOfStock = createAmountOfStockField();
 
-        bindFields();
+        bindFields(item);
 
         setWidth("100%");
-        TopMenu topMenu = new TopMenu();
+
         Label newItem = new Label("New Item");
         newItem.setStyleName(ValoTheme.LABEL_H1);
 
@@ -68,6 +65,7 @@ public class ItemCreationView extends CustomComponent implements View {
         });
 
         Button cancelButton = new Button("Cancel");
+        cancelButton.addClickListener( event ->   getUI().getNavigator().navigateTo("items"));
 
         HorizontalLayout buttons = new HorizontalLayout(createButton, cancelButton);
         buttons.setSpacing(true);
@@ -76,7 +74,21 @@ public class ItemCreationView extends CustomComponent implements View {
         mainLayout.setMargin(true);
         mainLayout.setWidth("100%");
         setCompositionRoot(mainLayout);
+    }
 
+    public ItemCreationView(ItemResource resource) {
+        this(resource,new Item());
+    }
+
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        if(event.getParameters() != null){
+            // split at "/", add each part as a label
+            String[] msgs = event.getParameters().split("/");
+            Item item = resource.getItemById(msgs[0]);
+            this.item = item;
+        }
     }
 
     private TextField createAmountOfStockField() {
@@ -87,8 +99,8 @@ public class ItemCreationView extends CustomComponent implements View {
         return amountOfStock;
     }
 
-    private void bindFields() {
-        item = new Item();
+    private void bindFields(Item item) {
+        this.item = item;
         fieldGroup = BeanFieldGroup.bindFieldsBuffered(this.item, this);
     }
 

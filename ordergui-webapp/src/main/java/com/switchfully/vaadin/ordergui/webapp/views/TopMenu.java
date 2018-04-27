@@ -10,7 +10,7 @@ public class TopMenu extends CssLayout {
 
     public TopMenu() {
         menuItemsButton.addClickListener(event1 -> getUI().getNavigator().navigateTo("items"));
-        menuCustomersButton.addClickListener(event1 -> getUI().getNavigator().navigateTo("items"));
+        menuCustomersButton.addClickListener(event1 -> getUI().getNavigator().navigateTo("customers"));
         addComponents(menuItemsButton, menuCustomersButton);
         setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
     }
