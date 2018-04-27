@@ -27,7 +27,12 @@ public class ItemResource {
         restTemplate.postForObject("http://localhost:9000/items", item, Item.class);
     }
 
+    public void update(Item item) {
+        restTemplate.put("http://localhost:9000/items/" + item.getId(), item);
+    }
+
     public Item getItemById(String id) {
-        return null;
+        Item item = restTemplate.getForObject("http://localhost:9000/items/" + id, Item.class);
+        return item;
     }
 }

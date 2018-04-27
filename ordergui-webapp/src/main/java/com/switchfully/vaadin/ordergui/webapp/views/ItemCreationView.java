@@ -10,6 +10,8 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.Objects;
+
 public class ItemCreationView extends CustomComponent implements View {
 
     private VerticalLayout mainLayout = new VerticalLayout();
@@ -21,9 +23,12 @@ public class ItemCreationView extends CustomComponent implements View {
     private Item item;
     private TopMenu topMenu = new TopMenu();
     private ItemResource resource;
+    private HorizontalLayout buttons;
+    private Button updateButton;
+    private Button createButton;
 
-    public ItemCreationView(ItemResource resource, Item item) {
-        this.item = item;
+    public ItemCreationView(ItemResource resource) {
+        this.item = new Item();
         this.resource = resource;
         name = createNameField();
         description = createDescriptionField();
@@ -50,7 +55,7 @@ public class ItemCreationView extends CustomComponent implements View {
         HorizontalLayout priceAndStock = new HorizontalLayout(euroAndPrice, amountOfStock);
         priceAndStock.setSpacing(true);
 
-        Button createButton = new Button("Create");
+        createButton = new Button("Create");
         createButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         createButton.addClickListener(event1 -> {
             try {
@@ -64,10 +69,24 @@ public class ItemCreationView extends CustomComponent implements View {
 
         });
 
+        updateButton = new Button("Update");
+        updateButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        updateButton.addClickListener(event1 -> {
+            try {
+                fieldGroup.commit();
+                resource.update(item);
+                getUI().getNavigator().navigateTo("items");
+
+            } catch (FieldGroup.CommitException ex) {
+                Notification.show(ex.getMessage());
+            }
+
+        });
+
         Button cancelButton = new Button("Cancel");
         cancelButton.addClickListener( event ->   getUI().getNavigator().navigateTo("items"));
 
-        HorizontalLayout buttons = new HorizontalLayout(createButton, cancelButton);
+        buttons = new HorizontalLayout(createButton, cancelButton);
         buttons.setSpacing(true);
 
         mainLayout.addComponents(topMenu, newItem, name, description, priceAndStock, buttons);
@@ -76,18 +95,26 @@ public class ItemCreationView extends CustomComponent implements View {
         setCompositionRoot(mainLayout);
     }
 
-    public ItemCreationView(ItemResource resource) {
-        this(resource,new Item());
-    }
+//    public ItemCreationView(ItemResource resource) {
+//        this(resource,new Item());
+//    }
 
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        if(event.getParameters() != null){
+        if(!Objects.equals(event.getParameters(), "")){
             // split at "/", add each part as a label
             String[] msgs = event.getParameters().split("/");
             Item item = resource.getItemById(msgs[0]);
             this.item = item;
+            this.bindFields(this.item);
+            buttons.replaceComponent(createButton, updateButton);
+        }
+        else {
+            this.item = new Item();
+            this.bindFields(this.item);
+            buttons.replaceComponent(updateButton, createButton);
+
         }
     }
 

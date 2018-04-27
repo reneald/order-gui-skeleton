@@ -38,7 +38,8 @@ public class ItemsView extends CustomComponent implements View {
         filterButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         filterButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         Button newItemButton = new Button("New Item");
-        newItemButton.addClickListener(event1 -> getUI().getNavigator().navigateTo("items/new"));
+
+        newItemButton.addClickListener(event1 -> getUI().getNavigator().navigateTo("itemsnew"));
         newItemButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton, newItemButton);
 
@@ -62,7 +63,7 @@ public class ItemsView extends CustomComponent implements View {
 
         itemGrid.setWidth("100%");
         itemGrid.getColumn("edit").setRenderer(new ButtonRenderer(event ->
-            getUI().getNavigator().navigateTo("item/edit" + event.getItemId())));
+            getUI().getNavigator().navigateTo("itemsedit" + "/" + ((Item)event.getItemId()).getId())));
         itemGrid.setColumns("name","description","price","amountOfStock", "edit");
         itemGrid.getColumn("edit").setMaximumWidth(95);
         mainLayout.setMargin(true);
