@@ -26,6 +26,7 @@ public class ItemCreationView extends CustomComponent implements View {
     private HorizontalLayout buttons;
     private Button updateButton;
     private Button createButton;
+    private final Button cancelButton;
 
     public ItemCreationView(ItemResource resource) {
         this.item = new Item();
@@ -83,7 +84,7 @@ public class ItemCreationView extends CustomComponent implements View {
 
         });
 
-        Button cancelButton = new Button("Cancel");
+        cancelButton = new Button("Cancel");
         cancelButton.addClickListener(event -> getUI().getNavigator().navigateTo("items"));
 
         buttons = new HorizontalLayout(createButton, cancelButton);
@@ -101,11 +102,13 @@ public class ItemCreationView extends CustomComponent implements View {
             String[] msgs = event.getParameters().split("/");
             this.item = resource.getItemById(msgs[0]);
             this.bindFields(this.item);
-            buttons.replaceComponent(createButton, updateButton);
+            buttons.removeAllComponents();
+            buttons.addComponents(updateButton, cancelButton);
         } else {
             this.item = new Item();
             this.bindFields(this.item);
-            buttons.replaceComponent(updateButton, createButton);
+            buttons.removeAllComponents();
+            buttons.addComponents(createButton, cancelButton);
 
         }
     }
