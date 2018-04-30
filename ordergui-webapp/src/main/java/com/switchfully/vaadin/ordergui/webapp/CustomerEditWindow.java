@@ -1,12 +1,14 @@
 package com.switchfully.vaadin.ordergui.webapp;
 
 
+import com.switchfully.vaadin.ordergui.interfaces.Address;
+import com.switchfully.vaadin.ordergui.interfaces.Email;
+import com.switchfully.vaadin.ordergui.interfaces.PhoneNumber;
 import com.switchfully.vaadin.ordergui.interfaces.customers.Customer;
 import com.switchfully.vaadin.ordergui.interfaces.customers.CustomerResource;
 import com.switchfully.vaadin.ordergui.webapp.views.TopMenu;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -18,25 +20,18 @@ public class CustomerEditWindow extends Window {
     private BeanFieldGroup<Customer> fieldGroup;
     private Customer customer;
     private CustomerResource resource;
-    private TextField firstName;
-    private TextField lastName;
-    private TextField houseNumber;
-    private TextField streetName;
-    private TextField postalCode;
-    private TextField country;
-    private TextField countryCallingCode;
-    private TextField number;
-    private TextField localPart;
-    private TextField domain;
 
     private HorizontalLayout buttons;
     private Button updateButton = new Button("Update");
     private Button createButton = new Button("Create");
     private Button cancelButton = new Button("Cancel");
 
-    public CustomerEditWindow(CustomerResource resource) {
+    public CustomerEditWindow(Customer customer, CustomerResource resource) {
         this.resource = resource;
+        this.customer = customer;
+
         fieldGroup = new BeanFieldGroup<>(Customer.class);
+        fieldGroup.setItemDataSource(customer);
 
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
@@ -57,7 +52,39 @@ public class CustomerEditWindow extends Window {
     }
 
     private HorizontalLayout createButtons() {
-        HorizontalLayout layout = new HorizontalLayout(createButton, cancelButton);
+        HorizontalLayout layout = new HorizontalLayout();
+        if (customer.getId() == null) {
+            createButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+            createButton.addClickListener(event1 -> {
+                try {
+                    fieldGroup.commit();
+                    customer.getEmail().setComplete(customer.getEmail().getLocalPart().concat("@").concat(customer.getEmail().getDomain()));
+                    resource.save(customer);
+                    close();
+
+                } catch (FieldGroup.CommitException ex) {
+                    Notification.show(ex.getMessage());
+                }
+
+            });
+            layout.addComponent(createButton);
+        } else {
+            updateButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+            updateButton.addClickListener(event -> {
+                try {
+                    fieldGroup.commit();
+                    customer.getEmail().setComplete(customer.getEmail().getLocalPart().concat("@").concat(customer.getEmail().getDomain()));
+                    resource.update(customer);
+                    close();
+                } catch (FieldGroup.CommitException ex) {
+                    Notification.show(ex.getMessage());
+                }
+            });
+            layout.addComponent(updateButton);
+        }
+
+        layout.addComponent(cancelButton);
+        cancelButton.addClickListener(event -> close());
         layout.setSpacing(true);
         return layout;
     }
@@ -96,7 +123,7 @@ public class CustomerEditWindow extends Window {
         address.setStyleName(ValoTheme.LABEL_H2);
         HorizontalLayout streetAndNumberFields = new HorizontalLayout();
         streetAndNumberFields.addComponents(
-                fieldGroup.buildAndBind("House Number","address.houseNumber"),
+                fieldGroup.buildAndBind("House Number", "address.houseNumber"),
                 fieldGroup.buildAndBind("Street Name", "address.streetName")
         );
         streetAndNumberFields.setSpacing(true);

@@ -18,7 +18,20 @@ public class CustomerResource {
     }
 
     public List<Customer> getCustomers() {
-        Customer[] customers = restTemplate.getForObject("http://localhost:9000/customers", Customer[].class);
+        Customer[] customers = restTemplate.getForObject("http://localhost:9000/customers/", Customer[].class);
         return Arrays.asList(customers);
+    }
+
+    public void save(Customer customer) {
+        restTemplate.postForObject("http://localhost:9000/customers/", customer, Customer.class);
+    }
+
+    public Customer getItemById(String id) {
+        Customer customer = restTemplate.getForObject("http://localhost:9000/customers/" + id, Customer.class);
+        return customer;
+    }
+
+    public void update(Customer customer) {
+        restTemplate.put("http://localhost:9000/customers/" + customer.getId(), customer);
     }
 }

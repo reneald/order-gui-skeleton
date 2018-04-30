@@ -103,7 +103,6 @@ public class ItemCreationView extends CustomComponent implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         if(!Objects.equals(event.getParameters(), "")){
-            // split at "/", add each part as a label
             String[] msgs = event.getParameters().split("/");
             Item item = resource.getItemById(msgs[0]);
             this.item = item;

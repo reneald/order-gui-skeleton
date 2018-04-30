@@ -1,6 +1,7 @@
 package com.switchfully.vaadin.ordergui.webapp.views;
 
 import com.switchfully.vaadin.ordergui.interfaces.Address;
+import com.switchfully.vaadin.ordergui.interfaces.Email;
 import com.switchfully.vaadin.ordergui.interfaces.PhoneNumber;
 import com.switchfully.vaadin.ordergui.interfaces.customers.Customer;
 import com.switchfully.vaadin.ordergui.interfaces.customers.CustomerResource;
@@ -17,6 +18,8 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Objects;
 
 public class CustomersView extends CustomComponent implements View {
 
@@ -42,7 +45,11 @@ public class CustomersView extends CustomComponent implements View {
         filterButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton);
 
-        HorizontalLayout header = new HorizontalLayout(title, filterLayout);
+        Button newCustomerButton = new Button("New Customer");
+        filterButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        newCustomerButton.addClickListener(event1 -> addEditWindow(new String(""), customerResource));
+
+        HorizontalLayout header = new HorizontalLayout(title, filterLayout, newCustomerButton);
         header.setWidth("100%");
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
         header.setComponentAlignment(filterLayout, Alignment.MIDDLE_RIGHT);
@@ -61,7 +68,7 @@ public class CustomersView extends CustomComponent implements View {
         customerGrid.setWidth("100%");
         customerGrid.getColumn("edit").setRenderer(new ButtonRenderer(event ->
                 /*getUI().getNavigator().navigateTo("customers"edit" + "/" + ((Item)event.getItemId()).getId()*/
-                addEditWindow(customerResource)
+                addEditWindow(((Customer) event.getItemId()).getId(), customerResource)
         ));
         customerGrid.setColumns("firstName","lastName", "streetAddress", "phoneNumber", "email.complete", "edit");
         customerGrid.getColumn("email.complete").setHeaderCaption("Email");
@@ -73,11 +80,24 @@ public class CustomersView extends CustomComponent implements View {
 
     }
 
-    private void addEditWindow(CustomerResource customerResource) {
-        CustomerEditWindow editWindow = new CustomerEditWindow(customerResource);
+    private void addEditWindow(String id, CustomerResource customerResource) {
+        Customer customer;
+        if(!id.equals("")){
+            customer = customerResource.getItemById(id);
+        }
+        else {
+            customer = new Customer();
+            customer.setAddress(new Address());
+            customer.setEmail(new Email());
+            customer.setPhoneNumber(new PhoneNumber());
+        }
+
+        CustomerEditWindow editWindow = new CustomerEditWindow(customer, customerResource);
+
         getUI().addWindow(editWindow);
         editWindow.center();
-
+        editWindow.setModal(true);
+        editWindow.addCloseListener(event -> setGridData());
     }
 
     private void setGridData() {
