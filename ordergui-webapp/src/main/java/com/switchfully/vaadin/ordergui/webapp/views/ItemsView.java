@@ -55,7 +55,6 @@ public class ItemsView extends CustomComponent implements View {
         itemGrid = new Grid();
         setGridData();
 
-
         filterButton.addClickListener(event1 -> {
             itemContainer.removeAllContainerFilters();
             if (!filterField.getValue().isEmpty()) {
