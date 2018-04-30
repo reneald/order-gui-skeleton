@@ -46,8 +46,9 @@ public class CustomersView extends CustomComponent implements View {
         HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton);
 
         Button newCustomerButton = new Button("New Customer");
-        filterButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        filterButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
         newCustomerButton.addClickListener(event1 -> addEditWindow(new String(""), customerResource));
+        newCustomerButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 
         HorizontalLayout header = new HorizontalLayout(title, filterLayout, newCustomerButton);
         header.setWidth("100%");
