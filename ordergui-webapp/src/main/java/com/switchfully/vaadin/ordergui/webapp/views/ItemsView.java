@@ -41,12 +41,16 @@ public class ItemsView extends CustomComponent implements View {
 
         newItemButton.addClickListener(event1 -> getUI().getNavigator().navigateTo("itemsnew"));
         newItemButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-        HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton, newItemButton);
+        HorizontalLayout filterLayout = new HorizontalLayout(filterField, filterButton);
 
-        HorizontalLayout header = new HorizontalLayout(title, filterLayout);
+        HorizontalLayout header = new HorizontalLayout(title, filterLayout, newItemButton);
         header.setWidth("100%");
+
+
+
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
-        header.setComponentAlignment(filterLayout, Alignment.MIDDLE_RIGHT);
+        header.setComponentAlignment(filterLayout, Alignment.MIDDLE_CENTER);
+        header.setComponentAlignment(newItemButton, Alignment.MIDDLE_RIGHT);
 
         itemGrid = new Grid();
         setGridData();
