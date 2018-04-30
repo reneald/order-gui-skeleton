@@ -52,7 +52,10 @@ public class CustomersView extends CustomComponent implements View {
         HorizontalLayout header = new HorizontalLayout(title, filterLayout, newCustomerButton);
         header.setWidth("100%");
         header.setComponentAlignment(title, Alignment.MIDDLE_LEFT);
-        header.setComponentAlignment(filterLayout, Alignment.MIDDLE_RIGHT);
+        header.setComponentAlignment(filterLayout, Alignment.MIDDLE_CENTER);
+        header.setComponentAlignment(newCustomerButton, Alignment.MIDDLE_RIGHT);
+
+
 
         customerGrid = new Grid();
         setGridData();
