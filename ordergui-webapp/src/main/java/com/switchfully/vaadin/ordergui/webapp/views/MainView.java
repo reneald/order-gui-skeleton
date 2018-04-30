@@ -11,9 +11,9 @@ public class MainView extends CustomComponent implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        TopMenu topMenu = new TopMenu();
-        mainLayout.setMargin(true);
-        mainLayout.addComponent(topMenu);
+//        TopMenu topMenu = new TopMenu();
+
+//        mainLayout.addComponent(topMenu);
         setCompositionRoot(mainLayout);
     }
 }

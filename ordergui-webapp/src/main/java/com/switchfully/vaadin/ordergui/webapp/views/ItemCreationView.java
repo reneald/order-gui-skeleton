@@ -21,7 +21,7 @@ public class ItemCreationView extends CustomComponent implements View {
     private TextField amountOfStock;
     private BeanFieldGroup<Item> fieldGroup;
     private Item item;
-    private TopMenu topMenu = new TopMenu();
+//    private TopMenu topMenu = new TopMenu();
     private ItemResource resource;
     private HorizontalLayout buttons;
     private Button updateButton;
@@ -89,8 +89,8 @@ public class ItemCreationView extends CustomComponent implements View {
         buttons = new HorizontalLayout(createButton, cancelButton);
         buttons.setSpacing(true);
 
-        mainLayout.addComponents(topMenu, newItem, name, description, priceAndStock, buttons);
-        mainLayout.setMargin(true);
+        mainLayout.addComponents(newItem, name, description, priceAndStock, buttons);
+
         mainLayout.setWidth("100%");
         setCompositionRoot(mainLayout);
     }

@@ -33,7 +33,7 @@ public class CustomersView extends CustomComponent implements View {
         this.customerResource = customerResource;
 
         setWidth("100%");
-        TopMenu topMenu = new TopMenu();
+//        TopMenu topMenu = new TopMenu();
 
         Label title = new Label("Customers");
         title.setStyleName(ValoTheme.LABEL_H1);
@@ -78,8 +78,8 @@ public class CustomersView extends CustomComponent implements View {
         customerGrid.getColumn("email.complete").setHeaderCaption("Email");
         customerGrid.getColumn("streetAddress").setHeaderCaption("Address");
         customerGrid.getColumn("edit").setMaximumWidth(95);
-        mainLayout.setMargin(true);
-        mainLayout.addComponents(topMenu, header, customerGrid);
+
+        mainLayout.addComponents(header, customerGrid);
         setCompositionRoot(mainLayout);
 
     }

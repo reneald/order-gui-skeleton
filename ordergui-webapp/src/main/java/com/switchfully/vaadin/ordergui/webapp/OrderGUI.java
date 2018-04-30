@@ -2,10 +2,7 @@ package com.switchfully.vaadin.ordergui.webapp;
 
 import com.switchfully.vaadin.ordergui.interfaces.customers.CustomerResource;
 import com.switchfully.vaadin.ordergui.interfaces.items.ItemResource;
-import com.switchfully.vaadin.ordergui.webapp.views.CustomersView;
-import com.switchfully.vaadin.ordergui.webapp.views.ItemCreationView;
-import com.switchfully.vaadin.ordergui.webapp.views.ItemsView;
-import com.switchfully.vaadin.ordergui.webapp.views.MainView;
+import com.switchfully.vaadin.ordergui.webapp.views.*;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
@@ -33,32 +30,19 @@ public class OrderGUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         setWidth("100%");
-        navigator = new Navigator(this, this);
+
+        VerticalLayout rootLayout = new VerticalLayout();
+        TopMenu menu = new TopMenu();
+        VerticalLayout contentLayout = new VerticalLayout();
+        rootLayout.addComponents(menu, contentLayout);
+        rootLayout.setMargin(true);
+        navigator = new Navigator(this, contentLayout);
         navigator.addView("", new MainView());
         navigator.addView("items", new ItemsView(itemResource));
         navigator.addView("itemsnew", new ItemCreationView(itemResource));
         navigator.addView("itemsedit", new ItemCreationView(itemResource));
         navigator.addView("customers", new CustomersView(customerResource));
-//        VerticalLayout mainLayout = new VerticalLayout();
-//        addTitleLabel(mainLayout);
-//        renderItems(mainLayout);
-//        setContent(mainLayout);
-    }
-
-    private void renderItems(VerticalLayout mainLayout) {
-        itemResource.getItems()
-                .forEach(item ->
-                        mainLayout.addComponent(
-                                new HorizontalLayout(
-                                        new Label("--> " + item.getName() + " €" + item.getPrice()))));
-    }
-
-    private void addTitleLabel(VerticalLayout mainLayout) {
-        mainLayout.addComponent(
-                new HorizontalLayout(
-                        new Label("ITEMS:")
-                )
-        );
+        setContent(rootLayout);
     }
 
 }

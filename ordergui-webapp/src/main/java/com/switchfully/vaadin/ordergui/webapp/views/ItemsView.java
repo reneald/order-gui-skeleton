@@ -26,7 +26,7 @@ public class ItemsView extends CustomComponent implements View {
         this.itemResource = itemResource;
 
         setWidth("100%");
-        TopMenu topMenu = new TopMenu();
+//        TopMenu topMenu = new TopMenu();
 
         Label title = new Label("Items");
         title.setStyleName(ValoTheme.LABEL_H1);
@@ -70,8 +70,8 @@ public class ItemsView extends CustomComponent implements View {
             getUI().getNavigator().navigateTo("itemsedit" + "/" + ((Item)event.getItemId()).getId())));
         itemGrid.setColumns("name","description","price","amountOfStock", "edit");
         itemGrid.getColumn("edit").setMaximumWidth(95);
-        mainLayout.setMargin(true);
-        mainLayout.addComponents(topMenu, header, itemGrid);
+
+        mainLayout.addComponents(header, itemGrid);
         setCompositionRoot(mainLayout);
 
     }
