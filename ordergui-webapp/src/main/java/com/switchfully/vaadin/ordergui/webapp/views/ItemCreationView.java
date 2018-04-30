@@ -84,7 +84,7 @@ public class ItemCreationView extends CustomComponent implements View {
         });
 
         Button cancelButton = new Button("Cancel");
-        cancelButton.addClickListener( event ->   getUI().getNavigator().navigateTo("items"));
+        cancelButton.addClickListener(event -> getUI().getNavigator().navigateTo("items"));
 
         buttons = new HorizontalLayout(createButton, cancelButton);
         buttons.setSpacing(true);
@@ -95,21 +95,14 @@ public class ItemCreationView extends CustomComponent implements View {
         setCompositionRoot(mainLayout);
     }
 
-//    public ItemCreationView(ItemResource resource) {
-//        this(resource,new Item());
-//    }
-
-
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        if(!Objects.equals(event.getParameters(), "")){
+        if (!Objects.equals(event.getParameters(), "")) {
             String[] msgs = event.getParameters().split("/");
-            Item item = resource.getItemById(msgs[0]);
-            this.item = item;
+            this.item = resource.getItemById(msgs[0]);
             this.bindFields(this.item);
             buttons.replaceComponent(createButton, updateButton);
-        }
-        else {
+        } else {
             this.item = new Item();
             this.bindFields(this.item);
             buttons.replaceComponent(updateButton, createButton);

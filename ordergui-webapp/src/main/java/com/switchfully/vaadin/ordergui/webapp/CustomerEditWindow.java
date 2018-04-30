@@ -1,9 +1,6 @@
 package com.switchfully.vaadin.ordergui.webapp;
 
 
-import com.switchfully.vaadin.ordergui.interfaces.Address;
-import com.switchfully.vaadin.ordergui.interfaces.Email;
-import com.switchfully.vaadin.ordergui.interfaces.PhoneNumber;
 import com.switchfully.vaadin.ordergui.interfaces.customers.Customer;
 import com.switchfully.vaadin.ordergui.interfaces.customers.CustomerResource;
 import com.switchfully.vaadin.ordergui.webapp.views.TopMenu;
