@@ -4,6 +4,7 @@ import com.switchfully.vaadin.ordergui.interfaces.Address;
 import com.switchfully.vaadin.ordergui.interfaces.PhoneNumber;
 import com.switchfully.vaadin.ordergui.interfaces.customers.Customer;
 import com.switchfully.vaadin.ordergui.interfaces.customers.CustomerResource;
+import com.switchfully.vaadin.ordergui.webapp.CustomerEditWindow;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.GeneratedPropertyContainer;
@@ -59,7 +60,9 @@ public class CustomersView extends CustomComponent implements View {
 
         customerGrid.setWidth("100%");
         customerGrid.getColumn("edit").setRenderer(new ButtonRenderer(event ->
-                getUI().getNavigator().navigateTo("customers"/*edit" + "/" + ((Item)event.getItemId()).getId()*/)));
+                /*getUI().getNavigator().navigateTo("customers"edit" + "/" + ((Item)event.getItemId()).getId()*/
+                addEditWindow(customerResource)
+        ));
         customerGrid.setColumns("firstName","lastName", "streetAddress", "phoneNumber", "email.complete", "edit");
         customerGrid.getColumn("email.complete").setHeaderCaption("Email");
         customerGrid.getColumn("streetAddress").setHeaderCaption("Address");
@@ -67,6 +70,13 @@ public class CustomersView extends CustomComponent implements View {
         mainLayout.setMargin(true);
         mainLayout.addComponents(topMenu, header, customerGrid);
         setCompositionRoot(mainLayout);
+
+    }
+
+    private void addEditWindow(CustomerResource customerResource) {
+        CustomerEditWindow editWindow = new CustomerEditWindow(customerResource);
+        getUI().addWindow(editWindow);
+        editWindow.center();
 
     }
 
