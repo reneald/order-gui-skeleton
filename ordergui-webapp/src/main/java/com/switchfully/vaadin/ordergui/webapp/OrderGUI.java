@@ -1,6 +1,8 @@
 package com.switchfully.vaadin.ordergui.webapp;
 
+import com.switchfully.vaadin.ordergui.interfaces.customers.CustomerResource;
 import com.switchfully.vaadin.ordergui.interfaces.items.ItemResource;
+import com.switchfully.vaadin.ordergui.webapp.views.CustomersView;
 import com.switchfully.vaadin.ordergui.webapp.views.ItemCreationView;
 import com.switchfully.vaadin.ordergui.webapp.views.ItemsView;
 import com.switchfully.vaadin.ordergui.webapp.views.MainView;
@@ -19,11 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class OrderGUI extends UI {
 
     private ItemResource itemResource;
+    private CustomerResource customerResource;
     private Navigator navigator;
 
     @Autowired
-    public OrderGUI(ItemResource itemResource) {
+    public OrderGUI(ItemResource itemResource, CustomerResource customerResource) {
         this.itemResource = itemResource;
+        this.customerResource = customerResource;
     }
 
     @Override
@@ -34,6 +38,7 @@ public class OrderGUI extends UI {
         navigator.addView("items", new ItemsView(itemResource));
         navigator.addView("itemsnew", new ItemCreationView(itemResource));
         navigator.addView("itemsedit", new ItemCreationView(itemResource));
+        navigator.addView("customers", new CustomersView(customerResource));
 //        VerticalLayout mainLayout = new VerticalLayout();
 //        addTitleLabel(mainLayout);
 //        renderItems(mainLayout);
